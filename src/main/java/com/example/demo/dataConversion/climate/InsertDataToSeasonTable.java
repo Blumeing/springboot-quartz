@@ -49,7 +49,7 @@ public class InsertDataToSeasonTable {
 	/**
 	 * 
 	 * @Title: getAllAvgTempDatas 得到该年份区间中每一天的日平均气温
-	 * @param year查询年份
+	 * @param year 查询年份
 	 * @return 参数类型
 	 * @return List<Map<String,Object>>
 	 * @date: 2018年11月13日 下午3:59:30
@@ -105,7 +105,6 @@ public class InsertDataToSeasonTable {
 	 * @param summerDatas
 	 * @param autumnDatas
 	 * @param winterDatas
-	 * @param pValues该站点编号的季节开始常年值
 	 * @return 参数类型
 	 * @return Map<String,Object>
 	 * @date: 2018年11月14日 上午11:00:49
@@ -171,7 +170,7 @@ public class InsertDataToSeasonTable {
 	 * @Title: earliestDate
 	 * @param stationNo
 	 * @param datas
-	 * @param filed 季节对应数据库字段
+	 * @param field 季节对应数据库字段
 	 * @return 参数类型
 	 * @return String
 	 * @date: 2018年11月14日 上午11:58:31
