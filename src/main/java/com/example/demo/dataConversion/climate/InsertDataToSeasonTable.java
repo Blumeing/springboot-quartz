@@ -12,10 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class InsertDataToSeasonTable {
@@ -86,6 +83,8 @@ public class InsertDataToSeasonTable {
 		for (Map<String, Object> map : stationNames) {
 			Map<String, Object> seasonMap = getSingleSeasonDatas(map.get("stationNo").toString(), springDatas,
 					summerDatas, autumnDatas, winterDatas/*, pValues*/);
+//			Map<String, Object> seasonMap = getSingleSeasonDatas("57131", springDatas,
+//					summerDatas, autumnDatas, winterDatas/*, pValues*/);
 			seasonMap.put("insertTime", insertTime);
 			seasonMap.put("sNo", map.get("stationNo"));
 			seasonMap.put("sName", map.get("stationName"));
@@ -188,8 +187,14 @@ public class InsertDataToSeasonTable {
 			if (dateList.size() > 1){// 看是否需要进行二次计算
 				Long differDays = LocalDateUtils.getDifferDays(time, time.substring(0, 4) + perenDate);
 				if (differDays > 15){// 二次计算
-					String second = dateList.get(1);
-					Long differDays1 = LocalDateUtils.getDifferDays(time, second);
+					LocalDate dtime = LocalDateUtils.stringToDate(time).plusDays(1);
+					while (dateList.contains(dtime.toString().replace("-",""))){
+						dtime = dtime.plusDays(1);
+					}
+					String date1 = dtime.minusDays(1).toString().replace("-","");
+					int index = dateList.indexOf(date1);
+					String second = dateList.get(index+1);
+					Long differDays1 = LocalDateUtils.getDifferDays(date1, second);
 					if (differDays1 > 1){// 看两次连续过程之间,满足季节的指标连续天数是否大于不满足的条件
 						String condition = "";
 						if (StringUtils.contains(field,"sp")) condition = "10_22";
@@ -197,7 +202,6 @@ public class InsertDataToSeasonTable {
 						if (StringUtils.contains(field,"au")) condition = "10_22";
 						if (StringUtils.contains(field,"wi")) condition = "-99_10";
 
-						String date1 = time;
 						String date2 = second;
 						String conditions = condition;
 						long count = slideDatas.stream().filter(x -> StringUtils.equals(x.get("stationNo").toString(), stationNo)
@@ -493,6 +497,7 @@ public class InsertDataToSeasonTable {
 		LocalDate nowDate = LocalDate.now();
 		int startYears = nowDate.getYear();
 		int endYears = nowDate.plusDays(-1).getYear();
-		InsertDataToSeasonTable.insertTotable(1981, endYears);
+		//InsertDataToSeasonTable.insertTotable(2019, 2020);
+		InsertDataToSeasonTable.getSeasonDatas(2020);
 	}
 }
